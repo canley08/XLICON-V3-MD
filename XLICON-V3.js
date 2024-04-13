@@ -948,10 +948,10 @@ module.exports = XliconBotInc = async (XliconBotInc, m, chatUpdate, store) => {
       });
     }
     //random number
-    function getRandom(min, max) {
+    function getRandomNumber(min, max) {
       min = Math.ceil(min);
       max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min + 1)) + min; 
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     }
     async function styletext(teks) {
       return new Promise((resolve, reject) => {
@@ -1513,7 +1513,7 @@ module.exports = XliconBotInc = async (XliconBotInc, m, chatUpdate, store) => {
     //total features
     const Xliconfeature = () => {
       var mytext = fs.readFileSync("./XLICON-V3.js").toString();
-      var numUpper = (mytext.match(/case '/g) || []).length;
+      var numUpper = (mytext.match(/case "/g) || []).length;
       return numUpper;
     };
     //autoreply
@@ -6303,6 +6303,44 @@ ${themeemoji} Title: ${result.title}`;
           }
         }
         break;
+
+      case "ytstalk":
+        {
+          if (!text) return replygcXlicon(`Channel Name?`);
+          let res = await fetchJson(
+            `https://api.maher-zubair.tech/stalk/ytchannel?q=${text}`
+          );
+          const dateString = res.result[0].channel_created;
+          const date = new Date(dateString);
+
+          const options = {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          };
+
+          const formattedDate = date.toLocaleDateString("en-US", options);
+          let txt = `
+┌──「 *YOUTUBE STALK* 
+▢ *Channel Name:* ${res.result[0].channel_name}
+▢ *Channel Created:* ${formattedDate}
+▢ *ABOUT:* ${res.result[0].channel_about || "None"}
+└────────────`;
+          if (res.status == "200") {
+            XliconBotInc.sendMessage(
+              m.chat,
+              {
+                image: { url: res.result[0].channel_picture.high.url },
+                caption: txt,
+              },
+              { quoted: m }
+            );
+          } else {
+            return replygcXlicon("No such channel exists...");
+          }
+        }
+
+        break;
       case "tiktokstalk":
         {
           if (!text) return replygcXlicon(`Username? `);
@@ -6449,6 +6487,42 @@ Nickname : ${eeh.nickname}`);
 Username : ${dat.userName}
 Id : ${q.split("|")[0]}
 ID Zone: ${q.split("|")[1]}`);
+        }
+        break;
+      case "disguise":
+      case "fakeinfo":
+        {
+          let res = await fetchJson(
+            `https://api.maher-zubair.tech/misc/fakeinfo`
+          );
+          let txt = `*FAKE INFO*
+ *Name*: ${res.result.results[0].name.title} ${res.result.results[0].name.first} ${res.result.results[0].name.last}
+ *Phone No*: ${res.result.results[0].cell}
+ *Date of Birth*: ${res.result.results[0].dob.date} 
+ *Age*: ${res.result.results[0].dob.age} 
+ *Gender*: ${res.result.results[0].gender}
+ *Address*: ${res.result.results[0].location.street}, ${res.result.results[0].location.state}
+ *Postal Code*: ${res.result.results[0].location.postcode}
+ *Email*: ${res.result.results[0].email}
+ *LOGINS*
+ *UUID*: ${res.result.results[0].login.uuid}
+ *Username*: ${res.result.results[0].login.username}
+ *Passowrd*: ${res.result.results[0].login.password}
+ *Md5*: ${res.result.results[0].login.md5}
+ *SHA1*: ${res.result.results[0].login.sha1}
+ *SHA256*: ${res.result.results[0].login.sha256}`;
+          if (res.status == "200") {
+            XliconBotInc.sendMessage(
+              m.chat,
+              {
+                image: { url: res.result.results[0].picture.large },
+                caption: txt,
+              },
+              { quoted: m }
+            );
+          } else {
+            return replygcXlicon("Failed to generate information...");
+          }
         }
         break;
       case "spotify":
@@ -7314,7 +7388,7 @@ ID Zone: ${q.split("|")[1]}`);
         {
           if (!text)
             return replygcXlicon(`Example : ${prefix + command} my profile`);
-          let kah = getRandom(0,100)
+          let kah = getRandomNumber(0, 100);
           let jawab = `*Rate ${text}*\nAnswer : ${kah}%`;
           await replygcXlicon(jawab);
         }
@@ -9470,19 +9544,18 @@ Cieeee, What's Going On❤️💖👀`,
           "Top",
           "Helpful",
         ];
-        
-        
+
         var sipat = sifat[Math.floor(Math.random() * sifat.length)];
         var biho = hoby[Math.floor(Math.random() * hoby.length)];
-        var bhucin = getRandom(0, 100);
-        var senga = getRandom(0, 100);
+        var bhucin = getRandomNumber(0, 100);
+        var senga = getRandomNumber(0, 100);
         var chakep = cakep[Math.floor(Math.random() * cakep.length)];
         var watak = wetak[Math.floor(Math.random() * wetak.length)];
-        var baik = getRandom(0, 100);
-        var burug = getRandom(0, 100);
-        var cerdas = getRandom(0, 100);
-        var berani = getRandom(0, 100);
-        var takut = getRandom(0, 100);
+        var baik = getRandomNumber(0, 100);
+        var burug = getRandomNumber(0, 100);
+        var cerdas = getRandomNumber(0, 100);
+        var berani = getRandomNumber(0, 100);
+        var takut = getRandomNumber(0, 100);
         profile = `*≡══《 Check @${bet.split("@")[0]} 》══≡*
 
 *Name :* ${pushname}
@@ -9512,7 +9585,7 @@ Cieeee, What's Going On❤️💖👀`,
           { quoted: m }
         );
         break;
-        
+
       case "charactercheck":
         if (!text)
           return replygcXlicon(
@@ -9539,7 +9612,7 @@ Cieeee, What's Going On❤️💖👀`,
           { quoted: m }
         );
         break;
-        case "stupidcheck":
+      case "stupidcheck":
       case "uncleancheck":
       case "hotcheck":
       case "smartcheck":
@@ -9547,7 +9620,7 @@ Cieeee, What's Going On❤️💖👀`,
       case "dogcheck":
       case "coolcheck":
       case "waifucheck":
-        case "handsomecheck":
+      case "handsomecheck":
       case "beautifulcheck":
       case "awesomecheck":
       case "greatcheck":
@@ -9560,7 +9633,7 @@ Cieeee, What's Going On❤️💖👀`,
       case "uglycheck":
         if (!m.isGroup) return XeonStickGroup();
         const cex = body.slice(0);
-        const cek2 = getRandom(0,100)
+        const cek2 = getRandomNumber(0, 100);
         if (mentionByReply) {
           XliconBotInc.sendMessage(
             from,
@@ -11176,7 +11249,97 @@ ${listAdmin}
           );
         }
         break;
+      //temp mails
+      case "tempmail":
+      case "tmg":
+        {
+          let res = await fetchJson(
+            "https://api.maher-zubair.tech/misc/tempmail"
+          );
+          replygcXlicon(
+            `*Temp Mail Generated*\n\n*Email*: ${res.result[0]}\n*ID*: ${res.result[1]}\n\nPlease use the *ID* to check emails. Example: ${prefix}tempib U2Vzc2lvbjqAMoScnm9KVZARWDpGFMBn`
+          );
+        }
+        break;
+      case "tempinbox":
+      case "tib":
+        {
+          if (!args[0]) {
+            return replygcXlicon(
+              `Specify valid temp mail ID. Type ${prefix}tempmail to generate one...`
+            );
+          }
+          async function getInboxData(qParam) {
+            try {
+              const response = await fetch(
+                `https://api.maher-zubair.tech/misc/get_inbox_tempmail?q=${qParam}`
+              );
+              const data = await response.json();
+              return data;
+            } catch (error) {
+              return replygcXlicon(`API is currently down. Try again later...`);
+            }
+          }
+          getInboxData(args[0]).then((data) => {
+            console.log(data);
+            if (!data.result) {
+              return replygcXlicon("Invalid ID. Enter correct Temp Mail ID.");
+            }
+            if (data.result[1] == 0) {
+              return replygcXlicon("Your Inbox is Empty...");
+            }
+            const emails = data.result[0];
+            let outputMessage = "INBOX:\n";
+            emails.forEach((email, index) => {
+              outputMessage += `\n*Email ${index + 1}:*\n`;
+              outputMessage += `* From: ${email.fromAddr}\n`;
+              outputMessage += `* To: ${email.toAddr}\n`;
+              outputMessage += `* Subject: ${email.headerSubject}\n`;
+              outputMessage += `* Text: ${email.text}\n`;
+              outputMessage += `* Download: ${email.downloadUrl}\n`;
+            });
+            replygcXlicon(outputMessage);
+          });
+        }
+        break;
+      //cricket
+      case "matches":
+      case "match":
+      case "cricket":
+        {
+          let res = await fetchJson(`https://api-smd-1.vercel.app/api/match`);
+          const matches = res.results;
+          console.log(matches);
 
+          let outputMessage = ""; // Initialize the output message
+          matches.forEach((match) => {
+            // Change 'matches' to 'match'
+            outputMessage += `* ${match.title}\n`;
+            outputMessage += `* URL: ${match.link}\n`;
+          });
+          replygcXlicon(
+            `${outputMessage}\n\nType *${prefix}score cricbuzz link* to get detailed result...`
+          );
+        }
+        break;
+      case "scores":
+      case "score":
+        {
+          if (!args[0]) {
+            return replygcXlicon(
+              `Cricbuzz match Link is required. Type *${prefix}matches* to get links...`
+            );
+          }
+          let res = await fetchJson(
+            `https://api-smd-1.vercel.app/api/score?url=${args[0]}`
+          );
+          if (res.error) {
+            ("No Data Found or Invalid URL...");
+          }
+          let txt = `*${res.results.names}*\n\n${res.results.details[0]}\n${res.results.details[1]}\n${res.results.details[2]}\n\n*Summary*: ${res.results.preview}`;
+          replygcXlicon(txt);
+        }
+        break;
       // < For quote>
 
       case "quote":
